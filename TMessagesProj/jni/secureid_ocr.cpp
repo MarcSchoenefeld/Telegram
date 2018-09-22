@@ -548,12 +548,14 @@ extern "C" JNIEXPORT jobjectArray Java_org_telegram_messenger_MrzRecognizer_bina
 					}
 				}
 				jobjectArray lineArray=env->NewObjectArray(static_cast<jsize>(rects.size()), rectClass, NULL);
-				int i=0;
-				for(std::vector<jobject>::iterator r=rects.begin();r!=rects.end();++r){
-					env->SetObjectArrayElement(lineArray, i, *r);
-					i++;
+				if (lineArray) {
+					int i=0;
+					for(std::vector<jobject>::iterator r=rects.begin();r!=rects.end();++r){
+						env->SetObjectArrayElement(lineArray, i, *r);
+						i++;
+					}
+					result.push_back(lineArray);
 				}
-				result.push_back(lineArray);
 				if((rects.size()>=44 && result.size()==2) || (rects.size()>=30 && result.size()==3)){
 					break;
 				}
@@ -568,10 +570,12 @@ extern "C" JNIEXPORT jobjectArray Java_org_telegram_messenger_MrzRecognizer_bina
 		return NULL;
 
 	jobjectArray resultArray=env->NewObjectArray(static_cast<jsize>(result.size()), env->GetObjectClass(result[0]), NULL);
-	int i=0;
-	for(std::vector<jobjectArray>::iterator a=result.begin();a!=result.end();++a){
-		env->SetObjectArrayElement(resultArray, static_cast<jsize>(result.size()-i-1), *a);
-		i++;
+	if (resultArray) {
+		int i=0;
+		for(std::vector<jobjectArray>::iterator a=result.begin();a!=result.end();++a){
+			env->SetObjectArrayElement(resultArray, static_cast<jsize>(result.size()-i-1), *a);
+			i++;
+		}
 	}
 	return resultArray;
 }
