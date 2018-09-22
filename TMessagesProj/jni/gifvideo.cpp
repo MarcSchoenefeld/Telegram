@@ -125,6 +125,8 @@ jlong Java_org_telegram_ui_Components_AnimatedFileDrawable_createDecoder(JNIEnv 
     char const *srcString = env->GetStringUTFChars(src, 0);
     size_t len = strlen(srcString);
     info->src = new char[len + 1];
+    if (!info->src)
+         return  0; 
     memcpy(info->src, srcString, len);
     info->src[len] = '\0';
     if (srcString != 0) {
